@@ -26,6 +26,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 public class CameraFragment extends SherlockFragment {
@@ -53,7 +54,7 @@ public class CameraFragment extends SherlockFragment {
 		super.onCreateView(inflater, container, savedInstanceState);
 
 		((MainActivity) getActivity()).getSupportActionBar().setTitle(
-				"Take a photo of the mine");
+				"Take a picture");
 
 		View view = inflater.inflate(R.layout.camera_layout, null);
 
@@ -69,7 +70,8 @@ public class CameraFragment extends SherlockFragment {
 
 		final LocationFragment lFragment = new LocationFragment();
 
-		Button cameraButton = (Button) view.findViewById(R.id.cameraButton);
+		ImageButton cameraButton = (ImageButton) view
+				.findViewById(R.id.cameraButton);
 
 		Button skipButton = (Button) view.findViewById(R.id.skipButton);
 
@@ -77,11 +79,7 @@ public class CameraFragment extends SherlockFragment {
 
 			public void onClick(View view) {
 
-				boolean json = takePicture(mActivity);
-
-				if (json) {
-
-				}
+				takePicture(mActivity);
 
 			}
 		});
@@ -121,53 +119,35 @@ public class CameraFragment extends SherlockFragment {
 		return true;
 	}
 
-	private File createImageFile() throws IOException {
-		// Create an image file name
-		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss")
-				.format(new Date());
-		String imageFileName = "JPEG_" + timeStamp + "_";
-		File storageDir = Environment
-				.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-		File image = File.createTempFile(imageFileName, /* prefix */
-				".jpg", /* suffix */
-				storageDir /* directory */
-		);
+		if (resultCode == getActivity().RESULT_OK) {
 
-		mCurrentPhotoPath = "file:" + image.getAbsolutePath();
-		return image;
+			complete();
+
+		} else if (resultCode == getActivity().RESULT_CANCELED) {
+			Toast.makeText(getActivity(), "Picture was not taken",
+					Toast.LENGTH_SHORT).show();
+		}
 
 	}
 
 	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-			if (resultCode == getActivity().RESULT_OK) {
-
-				complete();
-
-			} else if (resultCode == getActivity().RESULT_CANCELED) {
-				Toast.makeText(getActivity(), "Picture was not taken",
-						Toast.LENGTH_SHORT).show();
-			}
-		
+	public void onSaveInstanceState(Bundle outState) {
 
 	}
-	
-	 @Override
-	 public void onSaveInstanceState( Bundle outState ) {
 
-	 }  
-	
-	
-	public void complete(){
-			
-		((MainActivity)getActivity()).setImage(imageUri.getPath());
-		
-		LocationFragment lFragment = new LocationFragment();
-		
-		((MainActivity)getActivity()).setFragment(lFragment);
-		
+	public void complete() {
+
+		// ((MainActivity)getActivity()).setImage(imageUri.getPath());
+
+		ImageViewFragment iFragment = new ImageViewFragment();
+
+		iFragment.setImagePath(imageUri.getPath());
+
+		((MainActivity) getActivity()).setFragment(iFragment);
+
 	}
 
 }

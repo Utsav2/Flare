@@ -3,6 +3,9 @@
  */
 package com.steins.flare;
 
+import java.util.List;
+import java.util.Locale;
+
 import com.actionbarsherlock.app.SherlockFragment;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
@@ -12,7 +15,9 @@ import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
 import com.google.android.gms.maps.model.*;
 
 import android.content.Context;
+import android.location.Address;
 import android.location.Criteria;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -25,6 +30,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.Toast;
 
 /**
  * @author Utsav Shah
@@ -159,31 +165,22 @@ public class LocationFragment extends SherlockFragment implements
 
 		final DescriptionFragment dFragment = new DescriptionFragment();
 
-		Button skipButton = (Button) view.findViewById(R.id.skipLocationButton);
-
 		Button sendButton = (Button) view.findViewById(R.id.nextLocationButton);
 
 		sendButton.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View view) {
 
-				Log.i("HI", "TRIED SETTING");
-
-				mActivity.setCoordinates(lastMine);
-
-				mActivity.setFragment(dFragment);
-
-			}
-		});
-
-		skipButton.setOnClickListener(new OnClickListener() {
-
-			public void onClick(View view) {
+				
+				LocationDataAsync asyncSetter = new LocationDataAsync(mActivity, lastMine);
+			
+				asyncSetter.doInBackground(null);
 
 				mActivity.setFragment(dFragment);
 
 			}
 		});
+
 
 	}
 
@@ -192,5 +189,7 @@ public class LocationFragment extends SherlockFragment implements
 		// TODO Auto-generated method stub
 
 	}
+	
+
 
 }

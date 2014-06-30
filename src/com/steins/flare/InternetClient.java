@@ -16,11 +16,12 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 
 public class InternetClient {
 
-	private String uploadUrl = "http://requestb.in/1gbrdvu1";
+	private String uploadUrl = "http://requestb.in/124y88w1";
 	
 	public static final int REQUEST_TIMEOUT_MS = 30000;
 
@@ -34,6 +35,7 @@ public class InternetClient {
 
 		return uploadUrl;
 	}
+	
 
 	public boolean haveNetworkConnection(Context mContext) {
 
@@ -59,28 +61,38 @@ public class InternetClient {
 		return haveConnectedWifi || haveConnectedMobile;
 	}
 
-	public void postData(Context mContext, String imagePath, String descriptionText, String lat,
-			String lng) {
-		
-		RequestQueue req = Volley.newRequestQueue(mContext);  
-		
+	public void postData(final MainActivity mActivity, String imagePath,
+			String descriptionText, String lat, String lng, String country) {
 
-		File dir = Environment.getExternalStorageDirectory();
-		
+		RequestQueue req = Volley.newRequestQueue(mActivity
+				.getApplicationContext());
+
 		File image = null;
-		
-		if(imagePath != null){
-			
+
+		if (imagePath != null) {
+
 			image = new File(imagePath);
 		}
+		
+		TelephonyManager tMgr = (TelephonyManager)mActivity.getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
+
+		String IMEI = tMgr.getDeviceId();
+		
+		final CompletedFlareFragment cFragment = new CompletedFlareFragment();
+		
+		//Creating hashmap of data to send. Implementation done in MultipartRequest class
 
 		Map<String, String> mHashMap = new HashMap<String, String>();
-		
+
 		mHashMap.put("Description", descriptionText);
-		
+
 		mHashMap.put("Latitude", lat);
-		
+
 		mHashMap.put("Longitude", lng);
+		
+		mHashMap.put("IMEI", IMEI);
+		
+		mHashMap.put("Country", country);
 
 		String url = getUploadUrl();
 
@@ -90,13 +102,25 @@ public class InternetClient {
 			@Override
 			public void onErrorResponse(VolleyError error) {
 				// error
-				Log.e("Error.Response", "" + error.networkResponse);
+				// the "" + is being added to avoid Logcat exception if the
+				// error is null
+				Log.e("Error.Response", "" + error.getMessage());
+
+				cFragment.setSuccessState(false);
+
+				mActivity.setFragment(cFragment);
+
 			}
 		}, new Response.Listener<String>() {
 			@Override
 			public void onResponse(String response) {
 				// response
 				Log.d("Response", response);
+
+				cFragment.setSuccessState(true);
+
+				mActivity.setFragment(cFragment);
+
 			}
 		},
 
@@ -105,11 +129,14 @@ public class InternetClient {
 		mHashMap
 
 		);
-		
-		myRequest.setRetryPolicy(new DefaultRetryPolicy(REQUEST_TIMEOUT_MS, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
+		//Setting request timeout to be 30 seconds before trying again. Change REQUEST_TIMEOUT_MS to change
 		
+		myRequest.setRetryPolicy(new DefaultRetryPolicy(REQUEST_TIMEOUT_MS,
+				DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+				DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
 		req.add(myRequest);
-		
+
 	}
 }

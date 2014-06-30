@@ -37,14 +37,12 @@ public class DescriptionFragment extends SherlockFragment{
 		createButtonListeners(view);
 		
 		return view;
-		
-		
-		
+			
 	}
 	
 	public void createButtonListeners(View view){
 				
-		Button flareButton = (Button) view.findViewById(R.id.flareButton);
+		Button flareButton = (Button) view.findViewById(R.id.descriptionNextButton);
 		
 		flareButton.setOnClickListener(new OnClickListener() {
 
@@ -56,9 +54,7 @@ public class DescriptionFragment extends SherlockFragment{
 				
 				mActivity.setDescriptionText(mEdit.getText().toString());
 				
-				ConfirmFlareDialogFragment confirmDialog = new ConfirmFlareDialogFragment();
-								
-				confirmDialog.show(mActivity.getSupportFragmentManager(), "HELLO");
+				mActivity.setFragment(new FlareFragment());
 				
 			}
 		});

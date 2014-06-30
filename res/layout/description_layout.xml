@@ -26,8 +26,10 @@
 
         <EditText
             android:id="@+id/descriptionText"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="#333333"
             android:ems="10"
             android:gravity="start"
             android:inputType="textLongMessage" >
@@ -44,13 +46,12 @@
         android:orientation="horizontal" >
 
         <Button
-            android:id="@+id/flareButton"
+            android:id="@+id/descriptionNextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:text="Flare" />
-
+            android:text="Next" />
     </RelativeLayout>
 
 </LinearLayout>

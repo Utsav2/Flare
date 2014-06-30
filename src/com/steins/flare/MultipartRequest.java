@@ -18,11 +18,17 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyLog;
 
+//This class was taken from http://stackoverflow.com/a/21635786/3399432
+//and modified to suit this application's needs.
+//It is mostly a reimplementation of Request<T> of Google Volley using the http.entity.mime.MultipartEntityBuilder
+//Thus the application requires httpclient and httpcore from Apache.
+
+
 public class MultipartRequest extends Request<String> {
 
 	MultipartEntityBuilder entity = MultipartEntityBuilder.create();
 	HttpEntity httpentity;
-	private static final String FILE_PART_NAME = "file";
+	private static final String FILE_PART_NAME = "image";
 
 	private final Response.Listener<String> mListener;
 	private final File mFilePart;
@@ -50,11 +56,12 @@ public class MultipartRequest extends Request<String> {
 		// Checks whether user decided to upload image or skip it.
 
 		if (mFilePart != null) {
-			Log.e("HO", mFilePart.getAbsolutePath());
 			entity.addPart(FILE_PART_NAME, new FileBody(mFilePart));
 		}
 		for (Map.Entry<String, String> entry : mStringPart.entrySet()) {
 
+			
+			//Adding the location, description, etc to the body
 			entity.addTextBody(entry.getKey(), entry.getValue());
 		}
 	}
