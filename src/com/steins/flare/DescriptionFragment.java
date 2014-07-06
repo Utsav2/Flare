@@ -32,7 +32,7 @@ public class DescriptionFragment extends SherlockFragment{
 		
 		mActivity = (MainActivity) getActivity();
 
-		(mActivity).getSupportActionBar().setTitle("Describe it a little");
+		(mActivity).getSupportActionBar().setTitle("Describe it a little (max 400 chars)");
 		
 		createButtonListeners(view);
 		
@@ -52,7 +52,12 @@ public class DescriptionFragment extends SherlockFragment{
 				
 				EditText mEdit = (EditText)mActivity.findViewById(R.id.descriptionText);
 				
-				mActivity.setDescriptionText(mEdit.getText().toString());
+				String text = mEdit.getText().toString();
+				
+				if(text.length() > 400)
+					text = text.substring(0, 400);
+				
+				mActivity.setDescriptionText(text);
 				
 				mActivity.setFragment(new FlareFragment());
 				

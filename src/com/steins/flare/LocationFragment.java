@@ -66,6 +66,7 @@ public class LocationFragment extends SherlockFragment implements
 			lastMine = mActivity.getCoordinates();
 
 		}
+		
 		View view = inflater
 				.inflate(R.layout.location_layout, container, false);
 		map = ((SupportMapFragment) getFragmentManager().findFragmentById(
@@ -118,13 +119,13 @@ public class LocationFragment extends SherlockFragment implements
 		if (lastMine == null)
 			lastMine = coordinate;
 
-		moveToCoordinate(coordinate);
-
 		// http://stackoverflow.com/a/14153018/3399432
 
 		map.addMarker(new MarkerOptions().position(lastMine)
 				.title("Mine location")
 				.snippet("Please move the marker if needed.").draggable(true));
+		
+		moveToCoordinate(lastMine);
 
 		map.setOnMarkerDragListener(new OnMarkerDragListener() {
 
@@ -139,9 +140,9 @@ public class LocationFragment extends SherlockFragment implements
 				LatLng position = marker.getPosition();
 				lastMine = position;
 				String lat = Double.valueOf((position.latitude)).toString()
-						.substring(0, 7);
+						.substring(0, 8);
 				String lng = Double.valueOf((position.longitude)).toString()
-						.substring(0, 7);
+						.substring(0, 8);
 				(mActivity).getSupportActionBar().setTitle(lat + ", " + lng);
 			}
 
@@ -155,10 +156,8 @@ public class LocationFragment extends SherlockFragment implements
 	}
 
 	public void moveToCoordinate(LatLng coordinate) {
-		CameraUpdate center = CameraUpdateFactory.newLatLng(coordinate);
-		CameraUpdate zoom = CameraUpdateFactory.zoomTo(14);
-		map.moveCamera(center);
-		map.animateCamera(zoom);
+		
+		map.moveCamera( CameraUpdateFactory.newLatLngZoom(coordinate , 14.0f) );
 	}
 
 	public void createButtonListeners(View view) {

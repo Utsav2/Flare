@@ -1,38 +1,50 @@
 package com.steins.flare;
 
+import java.util.ArrayList;
+
+import org.json.JSONObject;
+
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.google.android.gms.maps.model.LatLng;
 
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
+import android.util.AttributeSet;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 
 public class MainActivity extends SherlockFragmentActivity {
-	
-	
-
-	private String uploadPhoneNumber = "";
-
-	private String TYPE_OF_USER = "typeOfUsage";
 
 	private String typeOfFlare = "";
 
-	SharedPreferences typeOfUser;
+	SharedPreferences sharedPrefs;
 
 	private String imagePath;
 
 	private LatLng mineLocation = null;
 
 	private String descriptionText = "";
-	
+
 	private String address;
+
+	private String NUMBER = "100";
+
+	private String TYPE_OF_USER = "101";
 
 	public void setDescriptionText(String text) {
 
@@ -48,43 +60,51 @@ public class MainActivity extends SherlockFragmentActivity {
 
 		String type = "REPORT";
 
-		if (fragment instanceof VolunteerFragment) {
-
-			type = "VOLUNTEER";
-
-		}
-
-		Editor editor = typeOfUser.edit();
-
-		editor.putString(TYPE_OF_USER, type);
-
-		editor.commit();
+		/*
+		 * if (fragment instanceof VolunteerFragment) {
+		 * 
+		 * type = "VOLUNTEER";
+		 * 
+		 * }
+		 * 
+		 * Editor editor = typeOfUser.edit();
+		 * 
+		 * editor.putString(TYPE_OF_USER, type);
+		 * 
+		 * editor.commit();
+		 */
 
 	}
 
 	public String getUploadPhoneNumber() {
 
-		return uploadPhoneNumber;
-
+		return sharedPrefs.getString(new InternetClient().UPLOAD_NUMBER, "");
+		
+		
 	}
 
-	public void setPhoneNumber(String number) {
-
-		this.uploadPhoneNumber = number;
-	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		
 
 		getSupportActionBar().setTitle("Flare");
 
-		typeOfUser = this.getSharedPreferences("com.steins.flare",
+		sharedPrefs = this.getSharedPreferences("com.steins.flare",
 				Context.MODE_PRIVATE);
+
+		InternetClient ic = new InternetClient();
 
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.fragment_layout);
+
+		if (!sharedPrefs.contains(ic.COUNTRY)
+				|| !sharedPrefs.contains(ic.UPLOAD_NUMBER)
+				|| !sharedPrefs.contains(ic.NUMBER)) {
+
+			setFragment(new SetupFragment());
+
+		}
 
 		// This obtains the usual job of the user. Therefore, it sets the user
 		// to a reporter or volunteer based on
@@ -92,9 +112,12 @@ public class MainActivity extends SherlockFragmentActivity {
 
 		// if(!typeOfUser.contains(TYPE_OF_USER)){ TODO: UNCOMMENT
 
-		StartFragment sFragment = new StartFragment();
+		else {
 
-		setFragment(sFragment);
+			StartFragment sFragment = new StartFragment();
+
+			setFragment(sFragment);
+		}
 
 		// }
 		/*
@@ -119,6 +142,10 @@ public class MainActivity extends SherlockFragmentActivity {
 
 	}
 
+	
+	
+	
+	
 	public void setFragment(Fragment fragment) {
 
 		FragmentTransaction transaction = getSupportFragmentManager()
@@ -154,7 +181,7 @@ public class MainActivity extends SherlockFragmentActivity {
 	public void setCoordinates(LatLng l, String address) {
 
 		mineLocation = l;
-		
+
 		this.address = address;
 
 	}
@@ -170,9 +197,9 @@ public class MainActivity extends SherlockFragmentActivity {
 		return mineLocation;
 
 	}
-	
-	public String getAddress(){
-		
+
+	public String getAddress() {
+
 		return address;
 	}
 
@@ -187,23 +214,9 @@ public class MainActivity extends SherlockFragmentActivity {
 
 	}
 
-	public void setUpFlare() {
-
-		if (typeOfFlare.equals("INTERNET")) {
-
-			setUpInternetFlare();
-		} else if (typeOfFlare.equals("SMS")) {
-
-			setUpSMSFlare();
-		}
-
-	}
-
 	public void setUpInternetFlare() {
 
 		if (getCoordinates() == null || getAddress() == null) {
-
-			Log.e("REMOVE SKIP BUTTON FROM MAP", "REMOVE SKIP BUTTON FROM MAP");
 
 			return;
 		}
@@ -214,19 +227,78 @@ public class MainActivity extends SherlockFragmentActivity {
 
 		InternetClient client = new InternetClient();
 
-		client.postData(this, getImage(), getDescriptionText(), lat, lng, getAddress());
+		client.postData(this, getImage(), getDescriptionText(), lat, lng,
+				getAddress());
 
 	}
 
-	public void setUpSMSFlare() {
+	public void setUpSMSFlare(String message) {
+
+		JSONObject json_obj = new JSONObject();
+
+		TelephonyManager tMgr = (TelephonyManager) getApplicationContext()
+				.getSystemService(Context.TELEPHONY_SERVICE);
+
+		String number = sharedPrefs.getString(NUMBER, "");
+
+		String IMEI = tMgr.getDeviceId();
+
+		Long tsLong = System.currentTimeMillis() / 1000;
+
+		String ts = tsLong.toString();
+
+		try {
+
+			json_obj.put("IMEI", IMEI);
+			json_obj.put("Time", ts);
+			json_obj.put("Message", message);
+			json_obj.put("Number", number);
+
+		} catch (Exception e) {
+
+		}
+
+		String formattedMessage = json_obj.toString();
+
+		sendSMS(getUploadPhoneNumber(), formattedMessage);
 
 	}
 
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// TODO Auto-generated method stub
+	public boolean onCreateOptionsMenu(com.actionbarsherlock.view.Menu menu) {
+
 		com.actionbarsherlock.view.MenuInflater inflater = getSupportMenuInflater();
 		inflater.inflate(R.menu.main_menu, menu);
+		Button setUpButton = (Button) findViewById(R.id.setupButton);
+		Button aboutButton = (Button) findViewById(R.id.aboutButton);
+
+		/*
+		 * aboutButton.setOnClickListener(new OnClickListener() {
+		 * 
+		 * @Override public void onClick(View arg0) {
+		 * 
+		 * setFragment(new AboutFragment());
+		 * 
+		 * } });
+		 */
+
 		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(
+			com.actionbarsherlock.view.MenuItem item) {
+		// Handle item selection
+		switch (item.getItemId()) {
+		case R.id.setupButton:
+			setFragment(new SetupFragment());
+			return true;
+		case R.id.aboutButton:
+			setFragment(new AboutFragment());
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+
 	}
 
 	@Override
@@ -239,6 +311,30 @@ public class MainActivity extends SherlockFragmentActivity {
 		} else {
 			super.onBackPressed();
 		}
+	}
+
+	private String SENT = "SMS_SENT";
+	private String DELIVERED = "SMS_DELIVERED";
+	private int MAX_SMS_MESSAGE_LENGTH = 160;
+
+	// ---sends an SMS message to another device---
+	// http://stackoverflow.com/questions/14452808/sending-and-receiving-sms-and-mms-in-android-pre-kit-kat-android-4-4
+	public void sendSMS(String phoneNumber, String message) {
+
+		PendingIntent piSent = PendingIntent.getBroadcast(
+				getApplicationContext(), 0, new Intent(SENT), 0);
+		PendingIntent piDelivered = PendingIntent.getBroadcast(
+				getApplicationContext(), 0, new Intent(DELIVERED), 0);
+		SmsManager smsManager = SmsManager.getDefault();
+
+		int length = message.length();
+		if (length > MAX_SMS_MESSAGE_LENGTH) {
+			ArrayList<String> messagelist = smsManager.divideMessage(message);
+			smsManager.sendMultipartTextMessage(phoneNumber, null, messagelist,
+					null, null);
+		} else
+			smsManager.sendTextMessage(phoneNumber, null, message, piSent,
+					piDelivered);
 	}
 
 }

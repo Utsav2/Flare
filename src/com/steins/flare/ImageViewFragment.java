@@ -1,19 +1,22 @@
 package com.steins.flare;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragment;
 
@@ -53,9 +56,39 @@ public class ImageViewFragment extends SherlockFragment {
 		ImageView image = (ImageView) view.findViewById(R.id.statusImage);
 
 		Bitmap bmp = BitmapFactory.decodeFile(mImagePath);
+		    	
+		makeImageSmall(bmp);
 
 		image.setImageBitmap(bmp);
 
+	}
+	
+	public void makeImageSmall(Bitmap bmp){
+				
+		
+		
+		ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+		
+		bmp.compress(Bitmap.CompressFormat.JPEG, 30, bytes);
+		
+		File f = new File(mImagePath);
+		
+		try {
+			
+			f.createNewFile();
+			FileOutputStream fo = new FileOutputStream(f);
+			fo.write(bytes.toByteArray());
+			fo.close();
+
+		} catch (IOException e) {
+			
+			Log.e("ERROR IN IMAGE", "");
+			
+			e.printStackTrace();
+		}
+
+
+		
 	}
 
 	public void createButton(View view) {

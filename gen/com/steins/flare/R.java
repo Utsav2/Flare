@@ -14,6 +14,9 @@ public final class R {
         public static final int pop_enter=0x7f040002;
         public static final int pop_exit=0x7f040003;
     }
+    public static final class array {
+        public static final int CountryArray=0x7f0c0000;
+    }
     public static final class attr {
         /**  Custom divider drawable to use for elements in the action bar. 
          <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
@@ -1510,6 +1513,10 @@ containing a value of this type.
     public static final class id {
         public static final int LinearLayout1=0x7f05005a;
         public static final int RelativeLayout1=0x7f050056;
+        public static final int UploadNumber=0x7f050070;
+        public static final int YourCountry=0x7f050071;
+        public static final int YourNumber=0x7f05006d;
+        public static final int aboutButton=0x7f050076;
         public static final int abs__action_bar=0x7f050044;
         public static final int abs__action_bar_container=0x7f050043;
         public static final int abs__action_bar_subtitle=0x7f050035;
@@ -1549,10 +1556,9 @@ containing a value of this type.
         public static final int abs__textButton=0x7f050037;
         public static final int abs__title=0x7f05003f;
         public static final int abs__up=0x7f05002f;
-        public static final int action_settings=0x7f05006a;
+        public static final int action_settings=0x7f050074;
         public static final int alignBounds=0x7f050002;
         public static final int alignMargins=0x7f050003;
-        public static final int background=0x7f05006b;
         public static final int book_now=0x7f050022;
         public static final int bottom=0x7f050005;
         public static final int buyButton=0x7f05001c;
@@ -1570,6 +1576,9 @@ containing a value of this type.
         public static final int descriptionNextButton=0x7f050060;
         public static final int descriptionText=0x7f05005f;
         public static final int disableHome=0x7f05002d;
+        public static final int editCountry=0x7f050072;
+        public static final int editNumber=0x7f05006e;
+        public static final int editUploadNumber=0x7f05006f;
         public static final int edit_query=0x7f05004a;
         public static final int end=0x7f050011;
         public static final int fill=0x7f05000d;
@@ -1583,6 +1592,7 @@ containing a value of this type.
         public static final int homeAsUp=0x7f05002a;
         public static final int horizontal=0x7f050000;
         public static final int hybrid=0x7f050016;
+        public static final int layout_root=0x7f050068;
         public static final int left=0x7f050006;
         public static final int listMode=0x7f050026;
         public static final int map=0x7f050066;
@@ -1594,11 +1604,13 @@ containing a value of this type.
         public static final int normal=0x7f050013;
         public static final int pager=0x7f050065;
         public static final int production=0x7f050019;
-        public static final int reportButton=0x7f050068;
+        public static final int reportButton=0x7f05006b;
         public static final int right=0x7f050007;
         public static final int sandbox=0x7f05001a;
         public static final int satellite=0x7f050014;
+        public static final int saveSetupButton=0x7f050073;
         public static final int selectionDetails=0x7f05001d;
+        public static final int setupButton=0x7f050075;
         public static final int showCustom=0x7f05002c;
         public static final int showHome=0x7f050029;
         public static final int showTitle=0x7f05002b;
@@ -1608,13 +1620,14 @@ containing a value of this type.
         public static final int strict_sandbox=0x7f05001b;
         public static final int tabMode=0x7f050027;
         public static final int terrain=0x7f050015;
+        public static final int textView=0x7f050069;
         public static final int textView1=0x7f050059;
-        public static final int toast=0x7f05006c;
         public static final int top=0x7f050004;
         public static final int useLogo=0x7f050028;
+        public static final int userInput=0x7f05006a;
         public static final int vertical=0x7f050001;
         public static final int view1=0x7f05005b;
-        public static final int volunteerButton=0x7f050069;
+        public static final int volunteerButton=0x7f05006c;
         public static final int webView1=0x7f050062;
         public static final int wrap_content=0x7f05001f;
     }
@@ -1652,14 +1665,16 @@ containing a value of this type.
         public static final int image_camera_layout=0x7f03001a;
         public static final int internet_report=0x7f03001b;
         public static final int location_layout=0x7f03001c;
-        public static final int report=0x7f03001d;
-        public static final int report_or_volunteer=0x7f03001e;
-        public static final int sherlock_spinner_dropdown_item=0x7f03001f;
-        public static final int sherlock_spinner_item=0x7f030020;
+        public static final int prompttext=0x7f03001d;
+        public static final int report=0x7f03001e;
+        public static final int report_or_volunteer=0x7f03001f;
+        public static final int setup_layout=0x7f030020;
+        public static final int sherlock_spinner_dropdown_item=0x7f030021;
+        public static final int sherlock_spinner_item=0x7f030022;
     }
     public static final class menu {
-        public static final int main=0x7f0c0000;
-        public static final int main_menu=0x7f0c0001;
+        public static final int main=0x7f0d0000;
+        public static final int main_menu=0x7f0d0001;
     }
     public static final class string {
         /**  Content description for the action bar "home" affordance. [CHAR LIMIT=NONE] 

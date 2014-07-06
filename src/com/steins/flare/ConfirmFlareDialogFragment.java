@@ -37,7 +37,7 @@ public class ConfirmFlareDialogFragment extends DialogFragment {
 								
 								((MainActivity) getActivity()).getSupportActionBar().setTitle("Uploading...");
 
-								((MainActivity) getActivity()).setUpFlare();
+								((MainActivity) getActivity()).setUpInternetFlare();
 								
 							}
 						})

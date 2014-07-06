@@ -32,8 +32,6 @@ public class CompletedFlareFragment extends SherlockFragment {
 
 		mActivity = (MainActivity) getActivity();
 
-		(mActivity).getSupportActionBar().setTitle("Flare sent");
-
 		createStatus(view);
 
 		return view;
@@ -66,6 +64,8 @@ public class CompletedFlareFragment extends SherlockFragment {
 
 		if (mSuccesfulFlare) {
 
+			(mActivity).getSupportActionBar().setTitle("Flare sent");
+			
 			resID = getResources().getIdentifier("green_check_mark",
 					"drawable", getActivity().getPackageName());
 
@@ -74,6 +74,8 @@ public class CompletedFlareFragment extends SherlockFragment {
 		}
 
 		else {
+			
+			(mActivity).getSupportActionBar().setTitle("Flare failed to send");
 
 			resID = getResources().getIdentifier("red_cross", "drawable",
 					getActivity().getPackageName());
@@ -85,6 +87,10 @@ public class CompletedFlareFragment extends SherlockFragment {
 	}
 
 	public void completedFlare(View view) {
+		
+		
+		
+		
 
 		Button completedButton = (Button) view
 				.findViewById(R.id.completedFlareButton);
@@ -96,8 +102,7 @@ public class CompletedFlareFragment extends SherlockFragment {
 			@Override
 			public void onClick(View v) {
 
-				Toast.makeText(getActivity().getApplicationContext(), "HI",
-						Toast.LENGTH_SHORT).show();
+				getActivity().finish();
 
 			}
 		});

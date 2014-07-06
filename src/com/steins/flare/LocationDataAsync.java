@@ -62,7 +62,7 @@ public class LocationDataAsync extends AsyncTask{
 		        	
 		        	address.put("Locality", addresses.get(0).getLocality());
 		        	
-		        	address.put("Admininstrative Area", addresses.get(0).getAdminArea());
+		        	address.put("Administrative Area", addresses.get(0).getAdminArea());
 		        	
 		        	address.put("Country", addresses.get(0).getCountryName());
 		        	

@@ -1,26 +1,17 @@
 package com.steins.flare;
 
 import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.actionbarsherlock.app.SherlockFragment;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -141,7 +132,7 @@ public class CameraFragment extends SherlockFragment {
 	public void complete() {
 
 		// ((MainActivity)getActivity()).setImage(imageUri.getPath());
-
+		
 		ImageViewFragment iFragment = new ImageViewFragment();
 
 		iFragment.setImagePath(imageUri.getPath());

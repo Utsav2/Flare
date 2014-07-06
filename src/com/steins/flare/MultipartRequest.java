@@ -56,11 +56,11 @@ public class MultipartRequest extends Request<String> {
 		// Checks whether user decided to upload image or skip it.
 
 		if (mFilePart != null) {
+			
 			entity.addPart(FILE_PART_NAME, new FileBody(mFilePart));
 		}
 		for (Map.Entry<String, String> entry : mStringPart.entrySet()) {
 
-			
 			//Adding the location, description, etc to the body
 			entity.addTextBody(entry.getKey(), entry.getValue());
 		}

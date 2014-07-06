@@ -5,4 +5,18 @@
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
 
+    <string-array name="CountryArray">
+        <item>United States</item>
+        <item>India</item>
+        <item>Afghanistan</item>
+        <item>Somalia</item>
+        <item>Kiribati</item>
+        <item>Mozambique</item>
+        <item>Bosnia and Herzegovina</item>
+        <item>Cambodia</item>
+        <item>Iraq</item>
+        <item>Angola</item>
+        <item>Egypt</item>
+    </string-array>
+
 </resources>
