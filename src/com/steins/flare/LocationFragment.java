@@ -169,7 +169,6 @@ public class LocationFragment extends SherlockFragment implements
 		sendButton.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View view) {
-
 				
 				LocationDataAsync asyncSetter = new LocationDataAsync(mActivity, lastMine);
 			

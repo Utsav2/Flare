@@ -80,9 +80,7 @@ public class MainActivity extends SherlockFragmentActivity {
 
 		return sharedPrefs.getString(new InternetClient().UPLOAD_NUMBER, "");
 		
-		
 	}
-
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
